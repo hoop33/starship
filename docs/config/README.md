@@ -18,7 +18,7 @@ All configuration for starship is done in this [TOML](https://github.com/toml-la
 add_newline = false
 
 # Replace the "❯" symbol in the prompt with "➜"
-[character]      # The name of the module we are confguring is "character"
+[character]      # The name of the module we are configuring is "character"
 symbol = "➜"     # The "symbol" segment is being set to "➜"
 
 # Disable the package module, hiding it from the prompt completely
@@ -75,12 +75,12 @@ add_newline = false
 prompt_order=["rust","line_break","package","line_break","character"]
 ```
 
-### Default prompt order
+### Default Prompt Order
 
-The `default_prompt_order` configuration option is used to define the order in which modules are shown in the prompt, if empty or no `prompt_order` is provided. The default is as shown:
+The default `prompt_order` is used to define the order in which modules are shown in the prompt, if empty or no `prompt_order` is provided. The default is as shown:
 
-```
-default_prompt_order = [
+```toml
+prompt_order = [
     "username",
     "hostname",
     "directory",
@@ -97,8 +97,8 @@ default_prompt_order = [
     "cmd_duration",
     "line_break",
     "jobs",
-    "time",
     "battery",
+    "time",
     "character",
 ]
 ```
@@ -326,21 +326,23 @@ current directory.
 
 ### Options
 
-| Variable          | Default      | Description                                             |
-| ----------------- | ------------ | ------------------------------------------------------- |
-| `conflicted`      | `"="`        | This branch has merge conflicts.                        |
-| `ahead`           | `"⇡"`        | This branch is ahead of the branch being tracked.       |
-| `behind`          | `"⇣"`        | This branch is behind of the branch being tracked.      |
-| `diverged`        | `"⇕"`        | This branch has diverged from the branch being tracked. |
-| `untracked`       | `"?"`        | There are untracked files in the working directory.     |
-| `stashed`         | `"$"`        | A stash exists for the local repository.                |
-| `modified`        | `"!"`        | There are file modifications in the working directory.  |
-| `staged`          | `"+"`        | A new file has been added to the staging area.          |
-| `renamed`         | `"»"`        | A renamed file has been added to the staging area.      |
-| `deleted`         | `"✘"`        | A file's deletion has been added to the staging area.   |
-| `show_sync_count` | `false`      | Show ahead/behind count of the branch being tracked.    |
-| `style`           | `"bold red"` | The style for the module.                               |
-| `disabled`        | `false`      | Disables the `git_status` module.                       |
+| Variable                 | Default      | Description                                             |
+| ------------------------ | ------------ | ------------------------------------------------------- |
+| `conflicted`             | `"="`        | This branch has merge conflicts.                        |
+| `ahead`                  | `"⇡"`        | This branch is ahead of the branch being tracked.       |
+| `behind`                 | `"⇣"`        | This branch is behind of the branch being tracked.      |
+| `diverged`               | `"⇕"`        | This branch has diverged from the branch being tracked. |
+| `untracked`              | `"?"`        | There are untracked files in the working directory.     |
+| `stashed`                | `"$"`        | A stash exists for the local repository.                |
+| `modified`               | `"!"`        | There are file modifications in the working directory.  |
+| `staged`                 | `"+"`        | A new file has been added to the staging area.          |
+| `renamed`                | `"»"`        | A renamed file has been added to the staging area.      |
+| `deleted`                | `"✘"`        | A file's deletion has been added to the staging area.   |
+| `show_sync_count`        | `false`      | Show ahead/behind count of the branch being tracked.    |
+| `prefix`                 | `[`          | Prefix to display immediately before git status.        |
+| `suffix`                 | `]`          | Suffix to display immediately after git status.         |
+| `style`                  | `"bold red"` | The style for the module.                               |
+| `disabled`               | `false`      | Disables the `git_status` module.                       |
 
 ### Example
 
@@ -568,6 +570,7 @@ The module will be shown if any of the following conditions are met:
 - The current directory contains a `pyproject.toml` file
 - The current directory contains a file with the `.py` extension
 - The current directory contains a `Pipfile` file
+- The current directory contains a `tox.ini` file
 
 ### Options
 

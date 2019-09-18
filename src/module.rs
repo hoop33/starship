@@ -35,7 +35,7 @@ pub struct Module<'a> {
     config: Option<&'a toml::value::Table>,
 
     /// The module's name, to be used in configuration and logging.
-    name: String,
+    _name: String,
 
     /// The styling to be inherited by all segments contained within this module.
     style: Style,
@@ -55,7 +55,7 @@ impl<'a> Module<'a> {
     pub fn new(name: &str, config: Option<&'a toml::value::Table>) -> Module<'a> {
         Module {
             config,
-            name: name.to_string(),
+            _name: name.to_string(),
             style: Style::default(),
             prefix: Affix::default_prefix(name),
             segments: Vec::new(),
@@ -74,9 +74,9 @@ impl<'a> Module<'a> {
         self.segments.last_mut().unwrap()
     }
 
-    /// Whether a module has any segments
+    /// Whether a module has non-empty segments
     pub fn is_empty(&self) -> bool {
-        self.segments.is_empty()
+        self.segments.iter().all(|segment| segment.is_empty())
     }
 
     /// Get the module's prefix
@@ -204,7 +204,7 @@ fn ansi_strings_modified(ansi_strings: Vec<ANSIString>, shell: String) -> Vec<AN
 /// Module affixes are to be used for the prefix or suffix of a module.
 pub struct Affix {
     /// The affix's name, to be used in configuration and logging.
-    name: String,
+    _name: String,
 
     /// The affix's style.
     style: Style,
@@ -216,7 +216,7 @@ pub struct Affix {
 impl Affix {
     pub fn default_prefix(name: &str) -> Self {
         Self {
-            name: format!("{}_prefix", name),
+            _name: format!("{}_prefix", name),
             style: Style::default(),
             value: "via ".to_string(),
         }
@@ -224,7 +224,7 @@ impl Affix {
 
     pub fn default_suffix(name: &str) -> Self {
         Self {
-            name: format!("{}_suffix", name),
+            _name: format!("{}_suffix", name),
             style: Style::default(),
             value: " ".to_string(),
         }
@@ -259,5 +259,40 @@ impl Affix {
 impl fmt::Display for Affix {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.ansi_string())
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_module_is_empty_with_no_segments() {
+        let name = "unit_test";
+        let module = Module {
+            config: None,
+            _name: name.to_string(),
+            style: Style::default(),
+            prefix: Affix::default_prefix(name),
+            segments: Vec::new(),
+            suffix: Affix::default_suffix(name),
+        };
+
+        assert!(module.is_empty());
+    }
+
+    #[test]
+    fn test_module_is_empty_with_all_empty_segments() {
+        let name = "unit_test";
+        let module = Module {
+            config: None,
+            _name: name.to_string(),
+            style: Style::default(),
+            prefix: Affix::default_prefix(name),
+            segments: vec![Segment::new("test_segment")],
+            suffix: Affix::default_suffix(name),
+        };
+
+        assert!(module.is_empty());
     }
 }
